@@ -1,0 +1,3 @@
+ALTER TABLE [dbo].[AspNetUsers] 
+	ADD CONSTRAINT CHK_username_no_space CHECK (CHARINDEX(' ', UserName) < 1)
+

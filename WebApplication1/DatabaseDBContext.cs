@@ -32,22 +32,5 @@ namespace WebApplication1
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<DatabaseDBContext>();
 
         }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-
-            var connectionString = configuration.GetConnectionString("AppDb");
-            if (!optionsBuilder.IsConfigured)
-                optionsBuilder.UseSqlServer(connectionString);
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-        }
     }
 }
