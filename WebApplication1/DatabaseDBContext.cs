@@ -15,12 +15,18 @@ namespace WebApplication1
         {
             
         }
-
         public void DefineEndpoints(WebApplication app)
         {
-            app.UseAuthentication();    
+            app.UseHttpsRedirection();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseCors(x =>
+            {
+                x.AllowAnyOrigin();
+                x.WithMethods("GET");
+                x.AllowAnyHeader();
+            });
         }
-
         public void DefineServices(IServiceCollection services)
         {
             var configuration = new ConfigurationBuilder()
@@ -30,7 +36,18 @@ namespace WebApplication1
             var connectionString = configuration.GetConnectionString("AppDb");
             services.AddDbContext<DatabaseDBContext>(options => options.UseSqlServer(connectionString));
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<DatabaseDBContext>();
+            services.AddAuthorization();
+            services.AddCors();
+        }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+            var connectionString = configuration.GetConnectionString("AppDb");
+            optionsBuilder.UseSqlServer(connectionString);
         }
     }
 }
