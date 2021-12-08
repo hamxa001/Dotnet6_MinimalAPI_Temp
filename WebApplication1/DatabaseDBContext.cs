@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.EndPointExtension;
+using WebApplication1.Models;
 
 namespace WebApplication1
 {
-    public class DatabaseDBContext : IdentityDbContext, IEndpointDefinition
+    public class DatabaseDBContext : IdentityDbContext<AspNetUsers>, IEndpointDefinition
     {
         public DatabaseDBContext()
         {
@@ -35,7 +36,7 @@ namespace WebApplication1
                 .Build();
             var connectionString = configuration.GetConnectionString("AppDb");
             services.AddDbContext<DatabaseDBContext>(options => options.UseSqlServer(connectionString));
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<DatabaseDBContext>();
+            services.AddIdentity<AspNetUsers, IdentityRole>().AddEntityFrameworkStores<DatabaseDBContext>();
             services.AddAuthorization();
             services.AddCors();
         }

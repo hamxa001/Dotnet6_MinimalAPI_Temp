@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.EndPointExtension;
+using WebApplication1.IRepositories;
 using WebApplication1.Models;
 using WebApplication1.Repositories;
 
@@ -9,25 +10,23 @@ namespace WebApplication1.EndsPoints
 {
     public class AspNetUserEndpointsDefinition : IEndpointDefinition
     {
+              
         public void DefineEndpoints(WebApplication app)
         {
-            app.MapPost("/register", [AllowAnonymous] async (IdentityUser users) =>
+            app.MapGet("/register", async Task<IResult> ([FromServices] IAspNetUserRepository _context) =>
             {
-                using (var _context = new DatabaseDBContext())
+                var result = await _context.GetAllUsers();
+                if(result.Success)
                 {
-                    users.Id = Guid.NewGuid().ToString();
-                    users.ConcurrencyStamp = Guid.NewGuid().ToString();
-                    users.SecurityStamp = Guid.NewGuid().ToString();
-                    await _context.AddAsync(users);
-                    await _context.SaveChangesAsync();
+                    return Results.Ok(result);
                 }
-                return "User successfully created";
+                return Results.NotFound(result);
             });
         }
 
         public void DefineServices(IServiceCollection services)
         {
-            services.AddSingleton<AspNetUserRepositories>();
+            services.AddScoped<IAspNetUserRepository,AspNetUserRepositories>();
         }
     }
 }
