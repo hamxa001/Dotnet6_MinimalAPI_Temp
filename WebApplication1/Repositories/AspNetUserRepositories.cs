@@ -30,19 +30,93 @@ namespace WebApplication1.Repositories
         }
         public async Task<ServiceResponse<AspNetUsers>> GetUserByID(string UserID)
         {
-            throw new NotImplementedException();
+            var ServiceResponse = new ServiceResponse<AspNetUsers>();
+            try
+            {
+                var users = await _context.Users.SingleAsync(x => x.Id == UserID);
+                ServiceResponse.Data = users;
+                ServiceResponse.Success = true;
+                ServiceResponse.Message = "User successfully fetched!";
+            }
+            catch (Exception ex)
+            {
+
+                ServiceResponse.Success = false;
+                ServiceResponse.Message = ex.Message;
+            }
+            return ServiceResponse;
         }
         public async Task<ServiceResponse<AspNetUsers>> AddUser(AspNetUsers Users)
         {
-            throw new NotImplementedException();
+            var ServiceResponse = new ServiceResponse<AspNetUsers>();
+            try
+            {
+                Users.Id = Guid.NewGuid().ToString();
+                var AddUser = await _context.Users.AddAsync(Users);
+                await _context.SaveChangesAsync();
+                ServiceResponse.Data = await _context.Users.SingleAsync(x => x.Id == Users.Id);
+                ServiceResponse.Success = true;
+                ServiceResponse.Message = "User successfully added!";
+            }
+            catch (Exception ex)
+            {
+                ServiceResponse.Success = false;
+                ServiceResponse.Message = ex.Message;
+            }
+            return ServiceResponse;
         }
-        public async Task<ServiceResponse<AspNetUsers>> UpdateUser(string UserID, AspNetUsers Users)
+        public async Task<ServiceResponse<AspNetUsers>> UpdateUser(string UserID, AspNetUsers UpdateUsers)
         {
-            throw new NotImplementedException();
+            var ServiceResponse = new ServiceResponse<AspNetUsers>();
+            try
+            {
+                var Users = await _context.Users.FirstOrDefaultAsync(x=>x.Id == UserID);
+                Users.UserName = UpdateUsers.UserName;
+                Users.AccessFailedCount = UpdateUsers.AccessFailedCount;
+                Users.ConcurrencyStamp = UpdateUsers.ConcurrencyStamp;
+                Users.Email = UpdateUsers.Email;
+                Users.EmailConfirmed = UpdateUsers.EmailConfirmed;
+                Users.LockoutEnabled = UpdateUsers.LockoutEnabled;
+                Users.LockoutEnd = UpdateUsers.LockoutEnd;
+                Users.NormalizedEmail = UpdateUsers.NormalizedEmail;
+                Users.NormalizedUserName = UpdateUsers.NormalizedUserName;
+                Users.PhoneNumber = UpdateUsers.PhoneNumber;
+                Users.PhoneNumberConfirmed = UpdateUsers.PhoneNumberConfirmed;
+                Users.SecurityStamp = UpdateUsers.SecurityStamp;
+                Users.TwoFactorEnabled = UpdateUsers.TwoFactorEnabled;
+
+                await _context.SaveChangesAsync();
+
+                ServiceResponse.Data = await _context.Users.SingleAsync(x => x.Id == UserID);
+                ServiceResponse.Success = true;
+                ServiceResponse.Message = "User successfully Updated!";
+            }
+            catch (Exception ex)
+            {
+                ServiceResponse.Success = false;
+                ServiceResponse.Message = ex.Message;
+            }
+            return ServiceResponse;
         }
         public async Task<ServiceResponse<bool>> DeleteUser(string UserID)
         {
-            throw new NotImplementedException();
+            var ServiceResponse = new ServiceResponse<bool>();
+            try
+            {
+                var DeleteUser = await _context.Users.SingleAsync(x => x.Id == UserID);
+                _context.Users.Remove(DeleteUser);
+                await _context.SaveChangesAsync();
+
+                ServiceResponse.Data = true;
+                ServiceResponse.Success = true;
+                ServiceResponse.Message = "User successfully Deleted!";
+            }
+            catch (Exception ex)
+            {
+                ServiceResponse.Success = false;
+                ServiceResponse.Message = ex.Message;
+            }
+            return ServiceResponse;
         }
     }
 }
