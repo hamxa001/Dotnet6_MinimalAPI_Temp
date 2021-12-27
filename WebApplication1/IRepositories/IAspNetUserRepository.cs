@@ -1,4 +1,5 @@
-﻿using WebApplication1.Models;
+﻿using WebApplication1.DTOs.UserDTOs;
+using WebApplication1.Models;
 
 namespace WebApplication1.IRepositories
 {
@@ -6,7 +7,7 @@ namespace WebApplication1.IRepositories
     {
         public Task<ServiceResponse<List<AspNetUsers>>> GetAllUsers();
         public Task<ServiceResponse<AspNetUsers>> GetUserByID(string UserID);
-        public Task<ServiceResponse<AspNetUsers>> AddUser(AspNetUsers Users);
+        public Task<ServiceResponse<AspNetUsers>> AddUser(AddUserDto Users);
         public Task<ServiceResponse<AspNetUsers>> UpdateUser(string UserID, AspNetUsers Users);
         public Task<ServiceResponse<bool>> DeleteUser(string UserID);
     }

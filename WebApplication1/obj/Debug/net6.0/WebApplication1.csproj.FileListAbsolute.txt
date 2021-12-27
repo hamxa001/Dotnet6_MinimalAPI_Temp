@@ -63,3 +63,5 @@ D:\MinimalAPI\Dotnet6_MinimalAPI_Temp\WebApplication1\obj\Debug\net6.0\WebApplic
 D:\MinimalAPI\Dotnet6_MinimalAPI_Temp\WebApplication1\obj\Debug\net6.0\ref\WebApplication1.dll
 D:\MinimalAPI\Dotnet6_MinimalAPI_Temp\WebApplication1\obj\Debug\net6.0\WebApplication1.pdb
 D:\MinimalAPI\Dotnet6_MinimalAPI_Temp\WebApplication1\obj\Debug\net6.0\WebApplication1.genruntimeconfig.cache
+D:\MinimalAPI\Dotnet6_MinimalAPI_Temp\WebApplication1\bin\Debug\net6.0\AutoMapper.dll
+D:\MinimalAPI\Dotnet6_MinimalAPI_Temp\WebApplication1\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

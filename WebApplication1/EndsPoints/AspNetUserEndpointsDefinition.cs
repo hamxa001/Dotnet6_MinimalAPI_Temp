@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication1.DTOs.UserDTOs;
 using WebApplication1.EndPointExtension;
 using WebApplication1.IRepositories;
 using WebApplication1.Models;
@@ -33,7 +34,7 @@ namespace WebApplication1.EndsPoints
                 return Results.NotFound(result);
             });
 
-            app.MapPost("/register", async Task<IResult> ([FromServices] IAspNetUserRepository _context, [FromBody] AspNetUsers users) => 
+            app.MapPost("/register", async Task<IResult> ([FromServices] IAspNetUserRepository _context, [FromBody] AddUserDto users) => 
             {
                 var result = await _context.AddUser(users);
                 if (result.Success)

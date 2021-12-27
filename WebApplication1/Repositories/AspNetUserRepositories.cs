@@ -1,15 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WebApplication1.Helpers;
 using WebApplication1.IRepositories;
 using WebApplication1.Models;
+using System.Security.Cryptography;
+using System.Text;
+using WebApplication1.DTOs.UserDTOs;
+using AutoMapper;
 
 namespace WebApplication1.Repositories
 {
     public class AspNetUserRepositories : IAspNetUserRepository
     {
         private readonly DatabaseDBContext _context;
-        public AspNetUserRepositories(DatabaseDBContext context)
+        private readonly IMapper _mapper;
+
+        public AspNetUserRepositories(DatabaseDBContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         public async Task<ServiceResponse<List<AspNetUsers>>> GetAllUsers()
         {
@@ -40,18 +48,30 @@ namespace WebApplication1.Repositories
             }
             catch (Exception ex)
             {
-
                 ServiceResponse.Success = false;
                 ServiceResponse.Message = ex.Message;
             }
             return ServiceResponse;
         }
-        public async Task<ServiceResponse<AspNetUsers>> AddUser(AspNetUsers Users)
+        public async Task<ServiceResponse<AspNetUsers>> AddUser(AddUserDto user)
         {
             var ServiceResponse = new ServiceResponse<AspNetUsers>();
+            AspNetUsers Users = _mapper.Map<AspNetUsers>(user);
             try
             {
-                Users.Id = Guid.NewGuid().ToString();
+                if (await UserExist(Users.UserName))
+                {
+                    ServiceResponse.Success = false;
+                    ServiceResponse.Message = "User Already Exist";
+                    return ServiceResponse;
+                }
+                CreatePasswordHash(Users.PasswordHash, out byte[] PasswordMade, out byte[] PasswordSalt);
+
+                Users.Id = CommonCode.NewGUID();
+                Users.SecurityStamp = CommonCode.NewGUID();
+                Users.ConcurrencyStamp = CommonCode.NewGUID();
+                Users.PasswordHash = Encoding.Default.GetString(PasswordMade);
+                Users.PasswordSalt = PasswordSalt;
                 var AddUser = await _context.Users.AddAsync(Users);
                 await _context.SaveChangesAsync();
                 ServiceResponse.Data = await _context.Users.SingleAsync(x => x.Id == Users.Id);
@@ -117,6 +137,25 @@ namespace WebApplication1.Repositories
                 ServiceResponse.Message = ex.Message;
             }
             return ServiceResponse;
+        }
+
+
+        private void CreatePasswordHash(string Password, out byte[] PasswordHash, out byte[] PasswordSalt)
+        {
+            using (var hmac = new HMACSHA512())
+            {
+                PasswordSalt = hmac.Key;
+                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(Password));
+            }
+        }
+
+        public async Task<bool> UserExist(string Username)
+        {
+            if (await _context.Users.AnyAsync(x=>x.UserName.ToLower().Equals(Username.ToLower())))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
