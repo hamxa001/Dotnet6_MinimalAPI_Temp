@@ -11,7 +11,6 @@ namespace WebApplication1.EndsPoints
 {
     public class AspNetUserEndpointsDefinition : IEndpointDefinition
     {
-
         public void DefineEndpoints(WebApplication app)
         {
             app.MapGet("/register", async Task<IResult> ([FromServices] IAspNetUserRepository _context) =>
@@ -24,7 +23,7 @@ namespace WebApplication1.EndsPoints
                 return Results.NotFound(result);
             });
 
-            app.MapGet("/register/{Id}", async Task<IResult> ([FromServices] IAspNetUserRepository _context, string UserId) =>
+            app.MapGet("/register/{Id}",async Task<IResult> ([FromServices] IAspNetUserRepository _context, string UserId) =>
             {
                 var result = await _context.GetUserByID(UserId);
                 if (result.Success)

@@ -9,10 +9,6 @@ builder.Services.AddEndpointDefinitions(typeof(IEndpointDefinition));
 
 var app = builder.Build();
 app.UseEndpointDefinitions();
-if (builder.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-}
 app.Run();
 
 

@@ -18,7 +18,6 @@ namespace WebApplication1.EndsPoints
             });
             IMapper autoMapper = mappingConfig.CreateMapper();
             services.AddSingleton(autoMapper);
-            //services.AddAutoMapper(typeof(AutoMapperProfiler));
         }
     }
 }

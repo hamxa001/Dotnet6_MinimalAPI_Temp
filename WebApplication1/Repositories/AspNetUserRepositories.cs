@@ -70,7 +70,7 @@ namespace WebApplication1.Repositories
                 Users.Id = CommonCode.NewGUID();
                 Users.SecurityStamp = CommonCode.NewGUID();
                 Users.ConcurrencyStamp = CommonCode.NewGUID();
-                Users.PasswordHash = Encoding.Default.GetString(PasswordMade);
+                Users.PasswordHash = Convert.ToBase64String(PasswordMade);
                 Users.PasswordSalt = PasswordSalt;
                 var AddUser = await _context.Users.AddAsync(Users);
                 await _context.SaveChangesAsync();

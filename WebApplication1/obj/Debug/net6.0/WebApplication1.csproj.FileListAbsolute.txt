@@ -65,3 +65,8 @@ D:\MinimalAPI\Dotnet6_MinimalAPI_Temp\WebApplication1\obj\Debug\net6.0\WebApplic
 D:\MinimalAPI\Dotnet6_MinimalAPI_Temp\WebApplication1\obj\Debug\net6.0\WebApplication1.genruntimeconfig.cache
 D:\MinimalAPI\Dotnet6_MinimalAPI_Temp\WebApplication1\bin\Debug\net6.0\AutoMapper.dll
 D:\MinimalAPI\Dotnet6_MinimalAPI_Temp\WebApplication1\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+D:\MinimalAPI\Dotnet6_MinimalAPI_Temp\WebApplication1\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\MinimalAPI\Dotnet6_MinimalAPI_Temp\WebApplication1\bin\Debug\net6.0\System.Net.Http.Formatting.dll
+D:\MinimalAPI\Dotnet6_MinimalAPI_Temp\WebApplication1\bin\Debug\net6.0\System.Web.Http.dll
+D:\MinimalAPI\Dotnet6_MinimalAPI_Temp\WebApplication1\bin\Debug\net6.0\Newtonsoft.Json.dll
+D:\MinimalAPI\Dotnet6_MinimalAPI_Temp\WebApplication1\bin\Debug\net6.0\Swashbuckle.Core.dll
