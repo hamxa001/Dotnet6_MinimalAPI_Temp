@@ -7,7 +7,7 @@ namespace WebApplication1.EndsPoints
     {
         public void DefineEndpoints(WebApplication app)
         {
-            
+
         }
 
         public void DefineServices(IServiceCollection services)

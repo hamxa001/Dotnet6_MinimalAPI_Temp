@@ -1,11 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using System.Security.Cryptography;
+using WebApplication1.DTOs.UserDTOs;
 using WebApplication1.Helpers;
 using WebApplication1.IRepositories;
-using WebApplication1.Models;
-using System.Security.Cryptography;
-using System.Text;
-using WebApplication1.DTOs.UserDTOs;
-using AutoMapper;
 
 namespace WebApplication1.Repositories
 {
@@ -90,7 +87,7 @@ namespace WebApplication1.Repositories
             var ServiceResponse = new ServiceResponse<AspNetUsers>();
             try
             {
-                var Users = await _context.Users.FirstOrDefaultAsync(x=>x.Id == UserID);
+                var Users = await _context.Users.FirstOrDefaultAsync(x => x.Id == UserID);
                 Users.UserName = UpdateUsers.UserName;
                 Users.AccessFailedCount = UpdateUsers.AccessFailedCount;
                 Users.ConcurrencyStamp = UpdateUsers.ConcurrencyStamp;
@@ -151,7 +148,7 @@ namespace WebApplication1.Repositories
 
         public async Task<bool> UserExist(string Username)
         {
-            if (await _context.Users.AnyAsync(x=>x.UserName.ToLower().Equals(Username.ToLower())))
+            if (await _context.Users.AnyAsync(x => x.UserName.ToLower().Equals(Username.ToLower())))
             {
                 return true;
             }

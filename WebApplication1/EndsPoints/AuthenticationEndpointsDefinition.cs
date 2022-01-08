@@ -1,21 +1,26 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using WebApplication1.EndPointExtension;
+﻿using WebApplication1.EndPointExtension;
 
 namespace WebApplication1.EndsPoints
 {
     public class AuthenticationEndpointsDefinition : IEndpointDefinition
     {
-        public IConfiguration Configuration { get;}
+        private IConfiguration _Configuration { get; }
+
         public void DefineEndpoints(WebApplication app)
         {
-          
+            app.UseAuthentication();
+            app.UseAuthorization();
         }
 
         public void DefineServices(IServiceCollection services)
         {
-            
+            services.AddAuthorization(option =>
+            {
+                option.FallbackPolicy = new AuthorizationPolicyBuilder()
+               .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+               .RequireAuthenticatedUser()
+               .Build();
+            });
         }
     }
 }

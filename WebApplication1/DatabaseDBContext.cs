@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using WebApplication1.EndPointExtension;
-using WebApplication1.Models;
 
 namespace WebApplication1
 {
@@ -14,19 +12,19 @@ namespace WebApplication1
         }
         public DatabaseDBContext(DbContextOptions<DatabaseDBContext> options) : base(options)
         {
-            
+
         }
         public void DefineEndpoints(WebApplication app)
         {
-            app.UseHttpsRedirection();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.UseCors(x =>
-            {
-                x.AllowAnyOrigin();
-                x.WithMethods("GET");
-                x.AllowAnyHeader();
-            });
+            //app.UseHttpsRedirection();
+            //app.UseAuthentication();
+            //app.UseAuthorization();
+            //app.UseCors(x =>
+            //{
+            //    x.AllowAnyOrigin();
+            //    x.WithMethods("GET");
+            //    x.AllowAnyHeader();
+            //});
         }
         public void DefineServices(IServiceCollection services)
         {
@@ -37,8 +35,8 @@ namespace WebApplication1
             var connectionString = configuration.GetConnectionString("AppDb");
             services.AddDbContext<DatabaseDBContext>(options => options.UseSqlServer(connectionString));
             services.AddIdentity<AspNetUsers, IdentityRole>().AddEntityFrameworkStores<DatabaseDBContext>();
-            services.AddAuthorization();
-            services.AddCors();
+            //services.AddAuthorization();
+            //services.AddCors();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

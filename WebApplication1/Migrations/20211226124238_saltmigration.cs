@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -21,7 +20,7 @@ namespace WebApplication1.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "PasswordSalt",
-                table: "AspNetUsers"); 
+                table: "AspNetUsers");
         }
     }
 }

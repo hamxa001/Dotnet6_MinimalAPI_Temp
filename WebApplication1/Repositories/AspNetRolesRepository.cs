@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using WebApplication1.IRepositories;
-using WebApplication1.Models;
 
 namespace WebApplication1.Repositories
 {

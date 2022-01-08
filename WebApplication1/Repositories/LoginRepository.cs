@@ -1,11 +1,5 @@
-﻿using System.Text;
-using Microsoft.EntityFrameworkCore;
+﻿using System.Security.Cryptography;
 using WebApplication1.IRepositories;
-using WebApplication1.Models;
-using System.Security.Cryptography;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace WebApplication1.Repositories
 {
@@ -25,19 +19,21 @@ namespace WebApplication1.Repositories
             try
             {
                 var User = await _context.Users.FirstOrDefaultAsync(x => x.Email.ToLower() == Credentials.Email.ToLower());
-                                
-                if(User == null){
-                ServiceResponse.Success = false;
-                ServiceResponse.Message = "User not found.";
+
+                if (User == null)
+                {
+                    ServiceResponse.Success = false;
+                    ServiceResponse.Message = "User not found.";
                 }
                 else
-                if(!VerifyPasswordHash(Credentials.Password, Convert.FromBase64String(User.PasswordHash), User.PasswordSalt))
+                if (!VerifyPasswordHash(Credentials.Password, Convert.FromBase64String(User.PasswordHash), User.PasswordSalt))
                 {
                     ServiceResponse.Success = false;
                     ServiceResponse.Message = "Username Or Password Is Incorrect";
                 }
-                else{
-                    ServiceResponse.Data = CreateToken(User); 
+                else
+                {
+                    ServiceResponse.Data = CreateToken(User);
                     ServiceResponse.Success = true;
                     ServiceResponse.Message = "Login is Successfull!";
                 }
@@ -71,24 +67,26 @@ namespace WebApplication1.Repositories
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, users.Id), 
+                new Claim(ClaimTypes.NameIdentifier, users.Id),
                 new Claim(ClaimTypes.Name, users.UserName),
                 new Claim(ClaimTypes.Email, users.Email)
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = creds
-            };
+            var token = new JwtSecurityToken
+        (
+            issuer: _configuration["Jwt:Issuer"],
+            audience: _configuration["Jwt:Audience"],
+            claims: claims,
+            expires: DateTime.UtcNow.AddDays(60),
+            notBefore: DateTime.UtcNow,
+            signingCredentials: new SigningCredentials(
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"])),
+                SecurityAlgorithms.HmacSha256)
+        );
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-            return tokenHandler.WriteToken(token);
+            return tokenString;
         }
     }
 }

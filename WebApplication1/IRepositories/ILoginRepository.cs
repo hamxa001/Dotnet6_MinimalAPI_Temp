@@ -1,6 +1,4 @@
-﻿using WebApplication1.Models;
-
-namespace WebApplication1.IRepositories
+﻿namespace WebApplication1.IRepositories
 {
     public interface ILoginRepository
     {

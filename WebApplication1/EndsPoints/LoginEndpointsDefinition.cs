@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Data.Entity;
-using WebApplication1.EndPointExtension;
+﻿using WebApplication1.EndPointExtension;
 using WebApplication1.IRepositories;
-using WebApplication1.Models;
 using WebApplication1.Repositories;
 
 namespace WebApplication1.EndsPoints
@@ -11,7 +8,9 @@ namespace WebApplication1.EndsPoints
     {
         public void DefineEndpoints(WebApplication app)
         {
-            app.MapPost("/login", async Task<IResult> ([FromServices] ILoginRepository _context, [FromBody] LoginInformation login) =>
+            app.MapPost("/login",
+                [HttpPost]
+            async Task<IResult> ([FromServices] ILoginRepository _context, [FromBody] LoginInformation login) =>
             {
                 var result = await _context.Login(login);
                 if (result.Success)
@@ -19,7 +18,7 @@ namespace WebApplication1.EndsPoints
                     return Results.Ok(result);
                 }
                 return Results.NotFound(result);
-            });
+            }).AllowAnonymous();
         }
 
         public void DefineServices(IServiceCollection services)

@@ -9,11 +9,11 @@
 
             foreach (var marker in scanMarkers)
             {
-                    endpointDefinitions.AddRange(
-                    marker.Assembly.ExportedTypes
-                        .Where(x => typeof(IEndpointDefinition).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
-                        .Select(Activator.CreateInstance).Cast<IEndpointDefinition>()
-                );
+                endpointDefinitions.AddRange(
+                marker.Assembly.ExportedTypes
+                    .Where(x => typeof(IEndpointDefinition).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
+                    .Select(Activator.CreateInstance).Cast<IEndpointDefinition>()
+            );
             }
 
             foreach (var endpointDefinition in endpointDefinitions)
